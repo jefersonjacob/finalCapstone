@@ -3,8 +3,8 @@ from datetime import datetime, date
 
 DATETIME_STRING_FORMAT = "%Y-%m-%d"
 
-# Function to load tasks from tasks.txt file
 def load_tasks():
+    """Function to load tasks from tasks.txt file"""
     if not os.path.exists("tasks.txt"):
         with open("tasks.txt", "w"):
             pass
@@ -24,11 +24,11 @@ def load_tasks():
         curr_t['assigned_date'] = datetime.strptime(task_components[4], DATETIME_STRING_FORMAT)
         curr_t['completed'] = True if task_components[5] == "Yes" else False
         task_list.append(curr_t)
-    
+
     return task_list
 
-# Function to save tasks to tasks.txt file
 def save_tasks(tasks):
+    """Function to save tasks to tasks.txt file"""
     with open("tasks.txt", "w") as task_file:
         task_list_to_write = []
         for t in tasks:
@@ -43,8 +43,8 @@ def save_tasks(tasks):
             task_list_to_write.append(";".join(str_attrs))
         task_file.write("\n".join(task_list_to_write))
 
-# Function to register a new user
 def reg_user():
+    """Function to register a new user"""
     new_username = input("New Username: ")
     if new_username in username_password:
         print("Username already exists. Please choose a different one.")
@@ -63,8 +63,8 @@ def reg_user():
 
     print("New user added.")
 
-# Function to add a new task
 def add_task():
+    """Function to add a new task"""
     task_username = input("Name of person assigned to task: ")
     if task_username not in username_password.keys():
         print("User does not exist. Please enter a valid username")
@@ -94,8 +94,8 @@ def add_task():
     save_tasks(task_list)
     print("Task successfully added.")
 
-# Function to view all tasks
 def view_all():
+    """Function to view all tasks"""
     for t in task_list:
         disp_str = f"Task: \t\t {t['title']}\n"
         disp_str += f"Assigned to: \t {t['username']}\n"
@@ -104,11 +104,11 @@ def view_all():
         disp_str += f"Task Description: \n {t['description']}\n"
         print(disp_str)
 
-# Function to view tasks assigned to the current user
 def view_mine():
+    """Function to view tasks assigned to the current user"""
     task_indices = []
 
-# Display tasks assigned to the current user and allow interaction
+    # Display tasks assigned to the current user and allow interaction
     task_number = 0
     for i, t in enumerate(task_list, start=1):
         if t['username'] == curr_user:
@@ -123,10 +123,10 @@ def view_mine():
 
     while True:
         selection = input("Enter the task number to mark it as complete, or type '-1' to return to the main menu: ")
-        
+
         if selection == '-1':
             break
-        
+
         try:
             task_index = int(selection) - 1
             if task_index in task_indices:  # Check if the selected index is within task_indices
@@ -157,9 +157,9 @@ def view_mine():
                 print("Invalid task number. Please select a valid task.")
         except ValueError:
             print("Invalid input. Please enter a number.")
-   
-# Function to generate reports
+
 def generate_reports():
+    """Function to generate reports"""
     task_list = load_tasks()
 
     # Task overview
@@ -167,8 +167,8 @@ def generate_reports():
     completed_tasks = sum(1 for t in task_list if t['completed'])
     uncompleted_tasks = total_tasks - completed_tasks
     # Compare with date part only
-    overdue_tasks = sum(1 for t in task_list if not t['completed'] 
-                        and t['due_date'].date() < date.today())  
+    overdue_tasks = sum(1 for t in task_list if not t['completed']
+                        and t['due_date'].date() < date.today())
     incomplete_percentage = (uncompleted_tasks / total_tasks) * 100
     overdue_percentage = (overdue_tasks / total_tasks) * 100
 
@@ -208,8 +208,8 @@ def generate_reports():
             user_overview_file.write(f"Percentage of Incomplete Tasks: {incomplete_task_percentage}%\n")
             user_overview_file.write(f"Percentage of Overdue Tasks: {overdue_task_percentage}%\n")
 
-# Function to display statistics
 def display_statistics():
+    """ Function to display statistics """
     task_list = load_tasks()
     num_users = len(username_password.keys())
     num_tasks = len(task_list)
@@ -233,8 +233,8 @@ if os.path.exists("user.txt"):
 task_list = load_tasks()
 
 # Login
-logged_in = False
-while not logged_in:
+LOGGED_IN = False
+while not LOGGED_IN:
     print("LOGIN")
     curr_user = input("Username: ")
     curr_pass = input("Password: ")
@@ -244,7 +244,7 @@ while not logged_in:
         print("Wrong password")
     else:
         print("Login Successful!")
-        logged_in = True
+        LOGGED_IN = True
 
 # Main loop
 while True:
